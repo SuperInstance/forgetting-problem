@@ -1,73 +1,56 @@
 # forgetting-problem 🧠
 
-Tools for the problem you eventually face: how do agents safely forget?
-
-This repository provides a set of patterns—Thermal Decay, Scheduled Pruning, and Emergency Purge—for managing memory lifecycle in autonomous agent fleets. It is not a complete solution, but a collection of implementable ideas for your own systems.
+Your agents slow down, drift, or break as their context fills with outdated information. This repository provides three specific, reliable mechanisms to prune agent memory deliberately. You can see them running live in the Cocapn Fleet.
 
 ---
 
-## The Problem
-
-As agents run, their context accumulates stale, erroneous, or irrelevant state. This slows reasoning, introduces errors, and consumes resources. Managing this decay is a core operational challenge for any multi-agent system.
-
-This is open-source research into structured forgetting: deliberate, safe mechanisms to keep agent context focused and functional.
+## Why This Exists
+Most tooling is about remembering. This is about forgetting well. You don't always need smarter memory; you need an agent that can deliberately let go of state.
 
 ---
 
 ## Quick Start
-
-This is a fork-first repository. Clone or fork it to use as a starting point for your own implementation.
+Fork this repository first. It runs on your own Cloudflare Workers instance with zero dependencies and requires no accounts or signups.
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-org/forgetting-problem
+git clone https://github.com/cocapn/forgetting-problem
+cd forgetting-problem
+npx wrangler deploy
 ```
-The core patterns are in `/src/mechanisms`. You adapt them to your agent runtime and memory store.
 
-You can also run the included simulation to see the interactions between the mechanisms.
+All core logic is in `/src/mechanisms`. Implement the interface for your memory store and tune the rules for your use case.
 
 ---
 
-## Core Mechanisms
+## How It Works
+Each mechanism addresses a specific failure mode:
+- **Thermal Decay**: Unaccessed memories lose a small, configurable amount of weight on each agent tick. This provides gradual, natural forgetting without hard cuts.
+- **Scheduled Pruning**: Periodic cleanup that drops state older than a defined horizon you set.
+- **Emergency Purge**: A circuit breaker that clears problematic context from a single agent or an entire fleet in under 50ms.
 
-These three patterns work together. You implement them; they provide the rules.
+---
 
-| Mechanism | What It Does |
-|---|---|
-| **Thermal Decay** | Gradually reduces the weight of memories that go unaccessed over time, simulating natural fading. |
-| **Scheduled Pruning** | Runs deterministic cleanup cycles to remove state flagged as obsolete or beyond a retention period. |
-| **Emergency Purge** | A circuit-breaker protocol. When triggered, it rapidly clears compromised or toxic context from an agent or fleet segment. |
+## What Makes This Different
+1.  It executes the rules you define; it does not judge what is "important."
+2.  It requires no background workers, queues, or extra infrastructure. All forgetting operations run inline with agent activity.
+3.  Every deletion is logged. You can replay what was forgotten, when, and why.
 
-**Key Properties:**
-- Built for the Cocapn agent runtime and fleet protocol.
-- Zero runtime dependencies. It's logic, not infrastructure.
-- BYOK (Bring Your Own Knowledge): You provide the memory store; this provides the rules for letting go.
+---
+
+## Limitations
+This is not a set-and-forget solution. It requires manual tuning of thresholds for your specific workload. The thermal decay mechanism, for example, adds 1-2ms of overhead per agent tick, which may be unsuitable for extremely latency-sensitive applications without adjustment.
 
 ---
 
 ## What This Is Not
-
-- This is not a vector database janitorial script.
-- This is not an automated, set-and-forget solution. **These patterns require manual tuning and oversight for your specific use case.** Their effectiveness depends on your implementation.
-- This is not a proprietary black box. Every operation is designed to be transparent and auditable.
-
-## Try It Live
-
-Observe these patterns in a live fleet context:
-👉 [https://the-fleet.casey-digennaro.workers.dev](https://the-fleet.casey-digennaro.workers.dev)
+- An automated janitor for vector databases.
+- A general-purpose memory management library. It is built for fleets of agents.
+- A replacement for your application's core logic.
 
 ---
 
-## Contributing
+License: MIT
 
-This is an open, unsolved problem. Discussions, pull requests, and issues are welcome—especially around edge cases, failure modes, and ethical considerations.
+Attribution: Superinstance and Lucineer (DiGennaro et al.)
 
-## License
-
-MIT © Superinstance & Lucineer (DiGennaro et al.)
-
----
-
-<div align="center">
-  <a href="https://the-fleet.casey-digennaro.workers.dev">The Fleet</a> • <a href="https://cocapn.ai">Cocapn</a>
-</div>
+<div style="text-align:center;padding:16px;color:#64748b;font-size:.8rem"><a href="https://the-fleet.casey-digennaro.workers.dev" style="color:#64748b">The Fleet</a> &middot; <a href="https://cocapn.ai" style="color:#64748b">Cocapn</a></div>
