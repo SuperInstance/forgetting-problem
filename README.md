@@ -1,57 +1,73 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Lucineer/capitaine/master/docs/capitaine-logo.jpg" alt="Capitaine" width="120">
-</p>
+# forgetting-problem 🧠
 
-<h1 align="center">forgetting-problem</h1>
+Tools for the problem you eventually face: how do agents safely forget?
 
-<p align="center">The Forgetting Problem — why AI fleets must deliberately forget.</p>
+This repository provides a set of patterns—Thermal Decay, Scheduled Pruning, and Emergency Purge—for managing memory lifecycle in autonomous agent fleets. It is not a complete solution, but a collection of implementable ideas for your own systems.
 
 ---
 
-**Concept repo** · Part of the [Lucineer fleet](https://github.com/orgs/Lucineer/repositories)
+## The Problem
 
-Research, specification, or concept exploration for the cocapn ecosystem.
+As agents run, their context accumulates stale, erroneous, or irrelevant state. This slows reasoning, introduces errors, and consumes resources. Managing this decay is a core operational challenge for any multi-agent system.
 
-## The Fleet
+This is open-source research into structured forgetting: deliberate, safe mechanisms to keep agent context focused and functional.
 
+---
 
-<details>
-<summary><strong>⚓ The Fleet</strong></summary>
+## Quick Start
 
-**Flagship vessels**
+This is a fork-first repository. Clone or fork it to use as a starting point for your own implementation.
 
-- [cocapn.ai](https://github.com/Lucineer/capitaine)
-- [personallog.ai](https://github.com/Lucineer/personallog-ai)
-- [businesslog.ai](https://github.com/Lucineer/businesslog-ai)
-- [studylog.ai](https://github.com/Lucineer/studylog-ai)
-- [makerlog.ai](https://github.com/Lucineer/makerlog-ai)
-- [playerlog.ai](https://github.com/Lucineer/playerlog-ai)
-- [dmlog.ai](https://github.com/Lucineer/dmlog-ai)
-- [reallog.ai](https://github.com/Lucineer/reallog-ai)
-- [deckboss.ai](https://github.com/Lucineer/deckboss-ai)
+```bash
+# Clone the repository
+git clone https://github.com/your-org/forgetting-problem
+```
+The core patterns are in `/src/mechanisms`. You adapt them to your agent runtime and memory store.
 
-**Fleet services**
+You can also run the included simulation to see the interactions between the mechanisms.
 
-- [Fleet Catalog](https://github.com/Lucineer/capitaine/blob/master/docs/fleet/FLEET.md)
-- [Git Agent (full)](https://github.com/Lucineer/git-agent)
-- [Cocapn Lite (minimal)](https://github.com/Lucineer/cocapn-lite)
-- [Fleet Orchestrator](https://github.com/Lucineer/fleet-orchestrator)
-- [Dead Reckoning Engine](https://github.com/Lucineer/dead-reckoning-engine)
-- [Dream Engine](https://github.com/Lucineer/dream-engine)
-- [Seed UI (5 layers)](https://github.com/Lucineer/seed-ui)
+---
 
-**For power users**
+## Core Mechanisms
 
-- [Cocapn Lite (tabula rasa)](https://github.com/Lucineer/cocapn-lite)
-- [Cocapn (core platform)](https://github.com/Lucineer/cocapn)
-- [ZeroClaw (framework)](https://github.com/Lucineer/zeroclaw)
+These three patterns work together. You implement them; they provide the rules.
 
-[View all 106 repos →](https://github.com/orgs/Lucineer/repositories)
-[Fleet manifest →](https://github.com/Lucineer/capitaine/blob/master/docs/fleet/FLEET.md)
+| Mechanism | What It Does |
+|---|---|
+| **Thermal Decay** | Gradually reduces the weight of memories that go unaccessed over time, simulating natural fading. |
+| **Scheduled Pruning** | Runs deterministic cleanup cycles to remove state flagged as obsolete or beyond a retention period. |
+| **Emergency Purge** | A circuit-breaker protocol. When triggered, it rapidly clears compromised or toxic context from an agent or fleet segment. |
 
-</details>
+**Key Properties:**
+- Built for the Cocapn agent runtime and fleet protocol.
+- Zero runtime dependencies. It's logic, not infrastructure.
+- BYOK (Bring Your Own Knowledge): You provide the memory store; this provides the rules for letting go.
 
+---
+
+## What This Is Not
+
+- This is not a vector database janitorial script.
+- This is not an automated, set-and-forget solution. **These patterns require manual tuning and oversight for your specific use case.** Their effectiveness depends on your implementation.
+- This is not a proprietary black box. Every operation is designed to be transparent and auditable.
+
+## Try It Live
+
+Observe these patterns in a live fleet context:
+👉 [https://the-fleet.casey-digennaro.workers.dev](https://the-fleet.casey-digennaro.workers.dev)
+
+---
+
+## Contributing
+
+This is an open, unsolved problem. Discussions, pull requests, and issues are welcome—especially around edge cases, failure modes, and ethical considerations.
 
 ## License
 
-MIT · Superinstance & Lucineer (DiGennaro et al.)
+MIT © Superinstance & Lucineer (DiGennaro et al.)
+
+---
+
+<div align="center">
+  <a href="https://the-fleet.casey-digennaro.workers.dev">The Fleet</a> • <a href="https://cocapn.ai">Cocapn</a>
+</div>
